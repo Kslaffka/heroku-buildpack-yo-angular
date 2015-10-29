@@ -160,9 +160,11 @@ if test -d $cache_dir/ruby/.gem; then
   cp -r $cache_dir/ruby/.gem $build_dir
   HOME=$build_dir gem update compass --user-install --no-rdoc --no-ri
   HOME=$build_dir gem update sass --user-install --no-rdoc --no-ri
+  HOME=$build_dir gem update compass-import-once --user-install --no-rdoc --no-ri
 else
   HOME=$build_dir gem install compass --user-install --no-rdoc --no-ri
   HOME=$build_dir gem install sass --user-install --no-rdoc --no-ri
+  HOME=$build_dir gem install compass-import-once -v 1.0.5 --user-install --no-rdoc --no-ri
 fi
 
 # Check and run Bower
