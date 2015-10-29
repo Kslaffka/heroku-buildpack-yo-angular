@@ -146,25 +146,19 @@ status "Building runtime environment"
 mkdir -p $build_dir/.profile.d
 echo "export PATH=\"\$HOME/vendor/node/bin:\$HOME/bin:\$HOME/node_modules/.bin:\$PATH\";" > $build_dir/.profile.d/nodejs.sh
 
-# install compass
+# Install Compass
 status "Installing Compass"
-#if [ "$STACK" == "cedar-14" ]; then
-#  export GEM_HOME=$build_dir/.gem/ruby/2.2.0
-#else
-  export GEM_HOME=$build_dir/.gem/ruby/1.9.1
-#fi
-
-PATH="$GEM_HOME/bin:$PATH"
-if test -d $cache_dir/ruby/.gem; then
-  status "Restoring ruby gems directory from cache"
-  cp -r $cache_dir/ruby/.gem $build_dir
-  HOME=$build_dir gem update compass --user-install --no-rdoc --no-ri
-  HOME=$build_dir gem update sass --user-install --no-rdoc --no-ri
-  HOME=$build_dir gem update compass-import-once --user-install --no-rdoc --no-ri
+if [ "$STACK" == "cedar-14" ]; then
+  export GEM_HOME=$cache_dir/ruby/.gem/ruby/2.2.0
 else
-  HOME=$build_dir gem install compass --user-install --no-rdoc --no-ri
-  HOME=$build_dir gem install sass --user-install --no-rdoc --no-ri
-  HOME=$build_dir gem install compass-import-once -v 1.0.5 --user-install --no-rdoc --no-ri
+  export GEM_HOME=$cache_dir/ruby/.gem/ruby/1.9.1
+fi
+PATH="$GEM_HOME/bin:$PATH"
+if [ ! -f $GEM_HOME/bin/compass ]; then
+  mkdir -p $cache_dir/ruby
+  HOME="$cache_dir/ruby" gem install sass --user-install --no-rdoc --no-ri
+  HOME="$cache_dir/ruby" gem install compass --user-install --no-rdoc --no-ri
+  HOME="$cache_dir/ruby" gem install compass-import-once --user-install --no-rdoc --no-ri
 fi
 
 # Check and run Bower
@@ -193,12 +187,12 @@ fi
     npm install grunt
     echo "-----> Found Gruntfile, running grunt heroku:$NODE_ENV task"
 
-    if [ -z "$GRUNT_FLAGS" ]; then
-      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV
-    else
-      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV $GRUNT_FLAGS
-    fi
-#      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV build
+#    if [ -z "$GRUNT_FLAGS" ]; then
+#      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV
+#    else
+#      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV $GRUNT_FLAGS
+#    fi
+      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV build
 
     status "Pruning dev dependencies"
     npm prune --production 2>&1 | indent
