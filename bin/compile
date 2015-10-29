@@ -186,11 +186,12 @@ fi
     npm install grunt
     echo "-----> Found Gruntfile, running grunt heroku:$NODE_ENV task"
 
-    if [ -z "$GRUNT_FLAGS" ]; then
-      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV
-    else
-      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV $GRUNT_FLAGS
-    fi
+#    if [ -z "$GRUNT_FLAGS" ]; then
+#      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV
+#    else
+#      $build_dir/node_modules/.bin/grunt heroku:$NODE_ENV $GRUNT_FLAGS
+#    fi
+      $build_dir/node_modules/.bin/grunt build
 
     status "Pruning dev dependencies"
     npm prune --production 2>&1 | indent
