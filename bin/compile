@@ -158,6 +158,7 @@ if [ ! -f $GEM_HOME/bin/compass ]; then
   mkdir -p $cache_dir/ruby
   HOME="$cache_dir/ruby" gem install sass --user-install --no-rdoc --no-ri
   HOME="$cache_dir/ruby" gem install compass --user-install --no-rdoc --no-ri
+  HOME="$cache_dir/ruby" gem install compass-import-once --user-install --no-rdoc --no-ri
 fi
 
 # Check and run Bower
